@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-
 @Entity
 public class Cliente {
     @Id
@@ -49,5 +48,14 @@ public class Cliente {
     public Cliente setNome(String nome) {
         this.nome = nome;
         return this;
+    }
+    
+    public Cliente(){
+
+    }
+    public Cliente(String nome, String email, boolean ativo){
+        this.nome= nome;
+        this.email= email;
+        this.ativo= ativo;
     }
 }

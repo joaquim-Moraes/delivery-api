@@ -1,19 +1,27 @@
 package com.deliverytech.delivery_api.Entity;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long restaurantId;
     private String nome;
     private String categoria;
     private boolean ativo;
     private int avaliacao;
+
+
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL)
+    private List<Produto> produtos;
 
     public boolean isAtivo() {
         return ativo;
@@ -33,12 +41,16 @@ public class Restaurant {
         return this;
     }
 
-    public Long getId() {
-        return id;
+    public Long getrestauranteId() {
+        return restaurantId;
     }
 
-    public Restaurant setId(Long id) {
-        this.id = id;
+    public Long getId() {
+        return restaurantId;
+    }
+
+    public Restaurant setrestauranteId(Long id) {
+        this.restaurantId = id;
         return this;
     }
 
@@ -58,5 +70,14 @@ public class Restaurant {
     public Restaurant setAvaliacao(int avaliacao) {
         this.avaliacao = avaliacao;
         return this;
+    }
+
+    public Restaurant() {}
+
+    public Restaurant(String nome, String categoria, boolean ativo, int avaliacao) {
+        this.nome = nome;
+        this.categoria = categoria;
+        this.ativo = ativo;
+        this.avaliacao = avaliacao;
     }
 }

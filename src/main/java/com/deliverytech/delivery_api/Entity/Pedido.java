@@ -2,7 +2,10 @@ package com.deliverytech.delivery_api.Entity;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -11,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Pedido {
@@ -24,9 +28,12 @@ public class Pedido {
     @JoinColumn(name ="cliente_id")
     private Cliente cliente;
 
+// Na classe Pedido
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<ItemPedido> itens = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private StatusPedido status;
+    private StatusPedido status = StatusPedido.PENDENTE;
 
     private String relatorio;
 
@@ -83,4 +90,27 @@ public class Pedido {
         this.datePedido = datePedido;
         return this;
     }
+    public Pedido() {
+        this.datePedido = LocalDate.now();
+    }
+
+    public void addItem(ItemPedido item) {
+        this.itens.add(item);
+    }
+    public List<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public Pedido(Cliente cliente) {
+        this(); 
+        this.cliente = cliente;
+    }
+
+
+        public Pedido( LocalDate datePedido, Cliente cliente, StatusPedido status, String relatorio) {
+            this.datePedido = datePedido;
+            this.cliente = cliente;
+            this.status = status;
+            this.relatorio = relatorio;
+        }
 }

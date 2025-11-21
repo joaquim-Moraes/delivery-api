@@ -9,19 +9,20 @@ import com.deliverytech.delivery_api.Entity.Restaurant;
 import com.deliverytech.delivery_api.Repository.RestauranteRepository;
 
 @Service
+@SuppressWarnings("null")
 public class RestauranteService {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
 
-    // Cadastro de restaurante
+    
     public Restaurant cadastrar(Restaurant restaurante) {
         validarDados(restaurante);
-        restaurante.setAtivo(true); // Ativo por padrão
+        restaurante.setAtivo(true); 
         return restauranteRepository.save(restaurante);
     }
 
-    // Validação de dados básicos
+   
     private void validarDados(Restaurant restaurante) {
         if (restaurante.getNome() == null || restaurante.getNome().isBlank()) {
             throw new IllegalArgumentException("Nome do restaurante é obrigatório.");
@@ -31,13 +32,13 @@ public class RestauranteService {
         }
     }
 
-    // Buscar restaurante por ID
+    
     public Restaurant buscarPorId(Long id) {
         return restauranteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Restaurante não encontrado."));
     }
 
-    // Atualizar dados do restaurante
+    
     public Restaurant atualizar(Long id, Restaurant dadosAtualizados) {
         Restaurant restaurante = buscarPorId(id);
 
@@ -49,24 +50,41 @@ public class RestauranteService {
         return restauranteRepository.save(restaurante);
     }
 
-    // Alterar status (ativo/inativo)
+    
     public Restaurant alterarStatus(Long id, boolean ativo) {
         Restaurant restaurante = buscarPorId(id);
         restaurante.setAtivo(ativo);
         return restauranteRepository.save(restaurante);
     }
 
-    // Buscar por nome
+    
     public List<Restaurant> buscarPorNome(String nome) {
         return restauranteRepository.findByNome(nome);
     }
-
-    // Buscar por categoria
+    public List<Restaurant> listarTodos() {
+        return restauranteRepository.findAll();
+    }
+    public List<Restaurant> listarComFiltros(String categoria, Boolean ativo) {
+        if (categoria != null && ativo != null) {
+            return restauranteRepository.findByCategoria(categoria).stream()
+                    .filter(r -> r.isAtivo() == ativo)
+                    .toList();
+        } else if (categoria != null) {
+            return restauranteRepository.findByCategoria(categoria);
+        } else if (ativo != null) {
+            return restauranteRepository.findByAtivoTrue();
+        } else {
+            return restauranteRepository.findAll();
+        }
+    }
+    public List<Restaurant> listarPorCategoria(String categoria) {
+        return restauranteRepository.findByCategoria(categoria);
+    }
+    
     public List<Restaurant> buscarPorCategoria(String categoria) {
         return restauranteRepository.findByCategoria(categoria);
     }
 
-    // Listar restaurantes ativos ordenados por avaliação
     public List<Restaurant> listarAtivosOrdenadosPorAvaliacao() {
         return restauranteRepository.findByAtivoTrueOrderByAvaliacaoDesc();
     }

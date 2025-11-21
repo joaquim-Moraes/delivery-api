@@ -10,6 +10,7 @@ import com.deliverytech.delivery_api.Entity.Cliente;
 import com.deliverytech.delivery_api.Repository.ClienteRepository;
 
 @Service
+@SuppressWarnings("null")
 public class ClienteService {
 
     @Autowired
@@ -19,11 +20,10 @@ public class ClienteService {
     public Cliente cadastrarCliente(Cliente cliente) {
         validarEmail(cliente.getEmail());
 
-        cliente.setAtivo(true); // Ativa o cliente por padrão
+        cliente.setAtivo(true);
         return clienteRepository.save(cliente);
     }
 
-    // Validação de e-mail
     private void validarEmail(String email) {
         Optional<Cliente> existente = clienteRepository.findByEmail(email);
         if (existente.isPresent()) {
@@ -31,7 +31,7 @@ public class ClienteService {
         }
     }
 
-    // Buscar cliente por ID
+    
     public Cliente buscarPorId(Long id) {
         return clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
@@ -41,7 +41,7 @@ public class ClienteService {
         return clienteRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("Cliente não encontrado"));
     }
 
-    // Atualizar dados do cliente
+    
     public Cliente atualizarCliente(Long id, Cliente dadosAtualizados) {
         Cliente cliente = buscarPorId(id);
 
@@ -51,7 +51,7 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    // Inativar cliente
+    
     public Cliente inativarCliente(Long id) {
         Cliente cliente = buscarPorId(id);
         cliente.setAtivo(false);
