@@ -1,5 +1,8 @@
 package com.deliverytech.delivery_api.DTO.Request;
 
+import com.deliverytech.delivery_api.Validation.ValidCategoria;
+
+import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,7 +10,7 @@ import jakarta.validation.constraints.Size;
 
 /**
  * DTO para criação e atualização de produtos.
- * Contém apenas os campos necessários para operações de escrita.
+ * Valida: nome (2-50 caracteres), preço (R$ 0.01 a R$ 500), categoria, descrição (mínimo 10 caracteres).
  */
 public class ProdutoDTO {
 
@@ -15,26 +18,34 @@ public class ProdutoDTO {
     private Long restauranteId;
 
     @NotBlank(message = "Nome do produto é obrigatório")
-    @Size(min = 3, max = 100, message = "Nome deve ter entre 3 e 100 caracteres")
+    @Size(min = 2, max = 50, message = "Nome deve ter entre 2 e 50 caracteres")
     private String nome;
 
     @NotBlank(message = "Categoria é obrigatória")
-    @Size(min = 3, max = 50, message = "Categoria deve ter entre 3 e 50 caracteres")
+    @ValidCategoria
     private String categoria;
 
-    @DecimalMin(value = "0.01", message = "Preço deve ser maior que R$ 0.01")
-    private double preco;
+    @NotNull(message = "Preço é obrigatório")
+    @DecimalMin(value = "0.01", message = "Preço mínimo é R$ 0.01")
+    @DecimalMax(value = "500.00", message = "Preço máximo é R$ 500.00")
+    private Double preco;
+
+    @NotBlank(message = "Descrição é obrigatória")
+    @Size(min = 10, message = "Descrição deve ter no mínimo 10 caracteres")
+    private String descricao;
 
     private boolean disponibilidade = true;
 
     public ProdutoDTO() {
     }
 
-    public ProdutoDTO(Long restauranteId, String nome, String categoria, double preco) {
+    public ProdutoDTO(Long restauranteId, String nome, String categoria, Double preco, 
+                     String descricao) {
         this.restauranteId = restauranteId;
         this.nome = nome;
         this.categoria = categoria;
         this.preco = preco;
+        this.descricao = descricao;
         this.disponibilidade = true;
     }
 
@@ -62,12 +73,20 @@ public class ProdutoDTO {
         this.categoria = categoria;
     }
 
-    public double getPreco() {
+    public Double getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(Double preco) {
         this.preco = preco;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public boolean isDisponibilidade() {

@@ -3,7 +3,7 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-IMPLEMENTATION_SUMARRY.md
+IMPLEMENTATION_SUMMARRY.md
 SOLUCAO_ERRO_PRECOUNITARIO.md
 ### STS ###
 .apt_generated
