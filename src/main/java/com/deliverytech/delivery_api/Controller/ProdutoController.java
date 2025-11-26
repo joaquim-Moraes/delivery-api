@@ -51,7 +51,7 @@ public class ProdutoController {
     public ResponseEntity<ApiResponse<Produto>> buscarPorId(
             @Parameter(description = "ID do produto", example = "1", required = true)
             @PathVariable Long id) {
-        Produto produto = produtoService.buscaPorId(id);
+        Produto produto = produtoService.buscarProdutoPorId(id);
         return ResponseEntity.ok(ApiResponse.success(produto, 200));
     }
 
@@ -89,7 +89,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/restaurante/{restauranteId}")
-    @Operation(summary = "Listar produtos por restaurante", description = "Retorna todos os produtos de um restaurante específico")
+    @Operation(summary = "Listar produtos por restaurante", description = "Retorna apenas produtos disponíveis de um restaurante")
     public ResponseEntity<PagedResponse<Produto>> listarPorRestaurante(
             @Parameter(description = "ID do restaurante", example = "1", required = true)
             @PathVariable Long restauranteId,
@@ -97,7 +97,7 @@ public class ProdutoController {
             @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Tamanho da página", example = "10")
             @RequestParam(defaultValue = "10") int size) {
-        List<Produto> produtos = produtoService.listarPorRestaurante(restauranteId);
+        List<Produto> produtos = produtoService.buscarProdutosPorRestaurante(restauranteId);
         int start = page * size;
         int end = Math.min(start + size, produtos.size());
         List<Produto> paginado = produtos.subList(start, end);
@@ -114,7 +114,7 @@ public class ProdutoController {
             @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "Tamanho da página", example = "10")
             @RequestParam(defaultValue = "10") int size) {
-        List<Produto> produtos = produtoService.listarPorCategoria(categoria);
+        List<Produto> produtos = produtoService.buscarProdutosPorCategoria(categoria);
         int start = page * size;
         int end = Math.min(start + size, produtos.size());
         List<Produto> paginado = produtos.subList(start, end);

@@ -46,8 +46,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
- 
-    @ExceptionHandler(BusinessException.class)
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleEntityNotFoundException(
+            EntityNotFoundException ex, WebRequest request) {
+        
+        ErrorResponse response = ErrorResponse.notFound(ex.getMessage());
+        response.setPath(request.getDescription(false).replace("uri=", ""));
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ErrorResponse> handleValidationException(
+            ValidationException ex, WebRequest request) {
+        
+        ErrorResponse response = ErrorResponse.badRequest(ex.getMessage());
+        response.setPath(request.getDescription(false).replace("uri=", ""));
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
     public ResponseEntity<ErrorResponse> handleBusinessException(
             BusinessException ex, WebRequest request) {
         

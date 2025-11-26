@@ -52,13 +52,18 @@ public class ClienteService {
     }
 
     
-    public Cliente inativarCliente(Long id) {
+    public Cliente ativarDesativarCliente(Long id) {
         Cliente cliente = buscarPorId(id);
-        cliente.setAtivo(false);
+        cliente.setAtivo(!cliente.isAtivo());
         return clienteRepository.save(cliente);
     }
 
-    // Listar clientes ativos
+    public Cliente alterarStatus(Long id, boolean ativo) {
+        Cliente cliente = buscarPorId(id);
+        cliente.setAtivo(ativo);
+        return clienteRepository.save(cliente);
+    }
+
     public List<Cliente> listarClientesAtivos() {
         return clienteRepository.findByAtivoTrue();
     }

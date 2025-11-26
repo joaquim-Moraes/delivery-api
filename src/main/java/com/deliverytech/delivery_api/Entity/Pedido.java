@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,6 +32,7 @@ public class Pedido {
 
 // Na classe Pedido
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @JsonManagedReference
     private List<ItemPedido> itens = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -99,6 +102,21 @@ public class Pedido {
     }
     public List<ItemPedido> getItens() {
         return itens;
+    }
+
+    public Pedido setItens(List<ItemPedido> itens) {
+        this.itens = itens;
+        if (this.itens != null) {
+            for (ItemPedido item : this.itens) {
+                if (item != null) {
+                    item.setPedido(this);
+                    if (item.getId() != null) {
+                        item.getId().setPedido(this);
+                    }
+                }
+            }
+        }
+        return this;
     }
 
     public Pedido(Cliente cliente) {

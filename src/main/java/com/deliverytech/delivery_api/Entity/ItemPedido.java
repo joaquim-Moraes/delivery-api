@@ -1,5 +1,7 @@
 package com.deliverytech.delivery_api.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -17,6 +19,7 @@ public class ItemPedido {
     @MapsId("pedido") 
     @ManyToOne
     @JoinColumn(name = "pedido_id") 
+    @JsonBackReference
     private Pedido pedido;
     
     @MapsId("produto") 
